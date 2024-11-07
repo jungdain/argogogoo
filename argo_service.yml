@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: apple
-        image: chaewon0720/keduitlab:apple
+        image: dann0524/test:papage
         resources:
           limits:
             memory: "64Mi"
