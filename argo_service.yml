@@ -1,11 +1,36 @@
-apiVersion: apps/v1
+# svc-shop > cluster-ip(default)
+apiVersion: v1
 kind: Service
 metadata:
-  name: web-service
+  name: svc-apple
 spec:
   selector:
-    app.kubernetes.io/name: web-deploy
-  type: ClusterIP
+    app: apple
   ports:
-  - protocol: TCP
-    port: 80
+  - port: 80
+    targetPort: 80
+---
+# deploy-shop
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apple
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apple
+  template:
+    metadata:
+      labels:
+        app: apple
+    spec:
+      containers:
+      - name: apple
+        image: chaewon0720/keduitlab:apple
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80

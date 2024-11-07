@@ -1,17 +1,33 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: deploy-test01
+  name: ingress-fruits
+  annotations: 
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  replicas: 3
-  selector: 
-    matchLabels: 
-      app.kubernetes.io/name: web-deploy
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: web-deploy
-    spec: 
-      containers:
-        - name: nginx
-          image: nginx
+  ingressClassName: nginx
+  rules:
+  - host: www.test.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: /apple(/|$)
+        backend:
+          service:
+            name: svc-apple
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: /banana(/|$)
+        backend:
+          service:
+            name: svc-banana
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: /($)
+        backend:
+          service:
+            name: svc-test
+            port: 
+              number: 80
